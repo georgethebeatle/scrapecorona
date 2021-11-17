@@ -9,7 +9,7 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 
 def main():
     data = load_data()
-    dates = data['date'].apply(lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'))
+    dates = data['date']
 
     dates0 = dates[0:-1].reset_index(drop=True)
     dates1 = dates[1:].reset_index(drop=True)
@@ -32,10 +32,13 @@ def load_data():
     data_path = os.path.join(script_dir, '..', 'covid.csv')
     data = pd.read_csv(data_path)
 
-    data['id'] = data.source.apply(lambda x: int(x.split('/')[-1]))
-    data = data.sort_values('id').reset_index(drop=True)
-    data = data.set_index('id')
+    data['date'] = data['date'].apply(parse_date)
+    data = data.sort_values('date').reset_index(drop=True)
     return data
+
+
+def parse_date(dateStr):
+    return datetime.datetime.strptime(dateStr, '%d-%m-%Y')
 
 
 main()
