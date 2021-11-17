@@ -36,9 +36,10 @@ class CovidSpider(scrapy.Spider):
         if date:
             item['date'] = dateparser.parse(date).strftime("%d-%m-%Y")
 
-        new_cases = response.css('.page-content-header::text').re_first('^([ 0-9]+[ 0-9]+).*COVID-19')
-        if new_cases:
-            item['new_cases'] = new_cases.replace(' ', '')
+        cases_matches = response.css('.page-content-header::text').re('(?=^([ 0-9]+[ 0-9]+))(?=.*потвърд)(?=.*случ)(?=.*послед)(?!.*Делта)|(?=^([ 0-9]+[ 0-9]+))(?=.*потвърд)(?=.*случ)(?=.*измин)(?!.*Делта)')
+        for new_cases in cases_matches:
+            if new_cases:
+                item['new_cases'] = new_cases.replace(' ', '')
 
         deaths = response.css('::text').re('на ([0-9]+) г.')
         item['deaths'] = str(len(deaths))
