@@ -29,7 +29,7 @@ class CsvWriterPipeline:
     filepath = 'covid.csv'
 
     def __init__(self):
-        self.header = 'date,new_cases,deaths,'
+        self.header = 'source,date,new_cases,deaths,'
         for age_group in range(20):
             self.header += f'{self.age_group_string(age_group)},'
         self.header = self.header[:-1]

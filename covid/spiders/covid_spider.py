@@ -31,7 +31,7 @@ class CovidSpider(scrapy.Spider):
     def parse_newspage(self, response):
         self.log(f'Scraping news page {response.url}')
 
-        item = {}
+        item = {'source': response.url}
         date = response.css('.single-news-date::text').get()
         if date:
             item['date'] = dateparser.parse(date).strftime("%d-%m-%Y")
