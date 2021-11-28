@@ -21,10 +21,12 @@ jobs:
       run: pip install .
     - name: Run spider
       run: scrapy crawl covid
+    - name: Update notebook
+      run: jupyter nbconvert --to notebook --inplace --execute covid.ipynb
     - name: Commit report
       run: |
         git config --global user.name 'Georgi Sabev'
         git config --global user.email 'georgethebeatle@gmail.com'
-        git add covid.csv lowerbound.txt
+        git add covid.csv lowerbound.txt covid.ipynb
         git commit -m "Update data"
         git push
